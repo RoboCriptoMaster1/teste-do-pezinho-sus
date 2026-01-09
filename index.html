@@ -1,68 +1,127 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-
+  <meta charset="UTF-8">
   <title>Teste do Pezinho - SUS | HEO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- RESPONSIVO -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <!-- TEMA PWA -->
-  <meta name="theme-color" content="#0b6b3a" />
-
-  <!-- MANIFESTO PWA -->
-  <link rel="manifest" href="manifest.json" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 
-  <!-- FONTE -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
-    rel="stylesheet"
-  />
-
+  <!-- PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
 
-  <!-- CABEÇALHO -->
-  <header class="app-header">
-    <h1>Cadastro – Teste do Pezinho</h1>
-    <p>Hospital Estadual de Oiapoque – SUS</p>
-  </header>
+<header>
+  <h1><i class="fa-solid fa-baby"></i> Cadastro – Teste do Pezinho</h1>
+  <p>Hospital Estadual de Oiapoque – SUS</p>
+</header>
 
-  <!-- CONTEÚDO PRINCIPAL -->
-  <main>
-    <!-- 🔽 aqui fica todo o seu formulário atual -->
-  </main>
+<main>
 
-  <!-- RODAPÉ -->
-  <footer class="app-footer">
-    <small>
-      Sistema Local – Teste do Pezinho • SUS • HEO
-    </small>
-  </footer>
+<form id="formRN">
 
-  <!-- JS PRINCIPAL -->
-  <script src="script.js"></script>
+  <fieldset>
+    <legend>🍼 Dados do Recém-Nascido</legend>
 
-  <!-- REGISTRO DO SERVICE WORKER -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker
-          .register('./service-worker.js')
-          .then(function () {
-            console.log('Service Worker registrado com sucesso');
-          })
-          .catch(function (error) {
-            console.log('Erro ao registrar Service Worker:', error);
-          });
-      });
-    }
-  </script>
+    <input required placeholder="Nome do RN" id="rnNome">
+    <input required placeholder="CPF do RN" id="rnCpf">
+    <input type="date" required id="rnNascimento">
+
+    <select id="rnSexo" required>
+      <option value="">Sexo</option>
+      <option>Masculino</option>
+      <option>Feminino</option>
+    </select>
+
+    <select id="rnRaca" required>
+      <option value="">Raça/Cor</option>
+      <option>Branca</option>
+      <option>Preta</option>
+      <option>Parda</option>
+      <option>Amarela</option>
+      <option>Indígena</option>
+    </select>
+
+    <input placeholder="Peso (kg)" id="rnPeso">
+  </fieldset>
+
+  <fieldset>
+    <legend>👩 Responsável</legend>
+
+    <input placeholder="Nome da Mãe" id="maeNome">
+    <input placeholder="CPF da Mãe" id="maeCpf">
+    <input placeholder="Telefone" id="maeTelefone">
+  </fieldset>
+
+  <fieldset>
+    <legend>🏥 Coleta</legend>
+
+    <input placeholder="Responsável pela coleta" id="coletaResp">
+    <input type="date" id="dataColeta">
+
+    <select id="resultado1">
+      <option value="">1ª Coleta</option>
+      <option>Normal</option>
+      <option>Alterado</option>
+    </select>
+
+    <select id="resultado2">
+      <option value="">2ª Coleta</option>
+      <option>Normal</option>
+      <option>Alterado</option>
+    </select>
+  </fieldset>
+
+  <fieldset>
+    <legend>✅ Checklist SUS</legend>
+
+    <label><input type="checkbox"> Coleta entre 3º e 5º dia</label>
+    <label><input type="checkbox"> Amostra adequada</label>
+    <label><input type="checkbox"> Identificação correta</label>
+    <label><input type="checkbox"> Orientação à família</label>
+  </fieldset>
+
+  <div class="acoes">
+    <button type="submit" class="btn green"><i class="fa fa-save"></i> Cadastrar</button>
+    <button type="button" class="btn blue" onclick="exportarExcel()"><i class="fa fa-file-excel"></i> Exportar Excel</button>
+    <input type="file" accept=".csv,.xlsx" onchange="importarArquivo(event)">
+  </div>
+
+</form>
+
+<section>
+  <h2>📊 Histórico de Cadastros</h2>
+
+  <input id="busca" placeholder="Buscar por nome, CPF ou data">
+
+  <table>
+    <thead>
+      <tr>
+        <th>RN</th>
+        <th>CPF</th>
+        <th>Nasc.</th>
+        <th>Raça</th>
+        <th>1ª</th>
+        <th>2ª</th>
+        <th>PDF</th>
+      </tr>
+    </thead>
+    <tbody id="lista"></tbody>
+  </table>
+</section>
+
+</main>
+
+<script src="script.js"></script>
 
 </body>
 </html>
