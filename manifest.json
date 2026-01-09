@@ -1,6 +1,6 @@
 {
   "name": "Teste do Pezinho - SUS",
-  "short_name": "Teste do Pezinho",
+  "short_name": "Teste do Pezinho - SUS",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -19,3 +19,4 @@
     }
   ]
 }
+
