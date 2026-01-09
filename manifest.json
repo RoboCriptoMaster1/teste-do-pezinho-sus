@@ -1,10 +1,11 @@
 {
-  "name": "Teste do Pezinho - SUS",
-  "short_name": "Teste do Pezinho - SUS",
+  "name": "Teste do Pezinho - SUS | HEO",
+  "short_name": "Teste do Pezinho",
+  "description": "Sistema Local de Cadastro do Teste do Pezinho - SUS",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0b6b3a",
+  "theme_color": "#0B5ED7",
   "orientation": "portrait",
   "icons": [
     {
@@ -19,4 +20,3 @@
     }
   ]
 }
-
