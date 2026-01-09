@@ -1,0 +1,60 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f4f8f6;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #0b6b3a;
+}
+
+form {
+  max-width: 1100px;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+fieldset {
+  border: 1px solid #0b6b3a;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+legend {
+  color: #0b6b3a;
+  font-weight: 600;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+}
+
+.acoes {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 10px;
+  background: #0b6b3a;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  background: white;
+  border-collapse: collapse;
+}
+
+th, td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+}
