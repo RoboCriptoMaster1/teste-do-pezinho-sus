@@ -1,10 +1,39 @@
-const CACHE_NAME = 'teste-pezinho-sus-v1';
+const CACHE_NAME = "pwa-teste-pezinho-v1";
 
-self.addEventListener('install', event => {
+const FILES_TO_CACHE = [
+  "./",
+  "./index.html",
+  "./manifest.json",
+
+  // CSS
+  "./css/style.css",
+
+  // JS
+  "./js/app.js",
+  "./js/pdf.js",
+
+  // Fonts
+  "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap",
+
+  // Icons
+  "./icons/icon-192.png",
+  "./icons/icon-256.png",
+  "./icons/icon-384.png",
+  "./icons/icon-512.png"
+];
+
+// INSTALL
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(FILES_TO_CACHE);
+    })
+  );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
+// ACTIVATE
+self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
@@ -19,11 +48,13 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-/*
-  IMPORTANTE:
-  Durante desenvolvimento, NÃO cacheamos arquivos.
-  Isso evita tela branca ao apertar F5.
-*/
-self.addEventListener('fetch', event => {
-  event.respondWith(fetch(event.request));
+// FETCH (offline-first)
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    }).catch(() => {
+      return caches.match("./index.html");
+    })
+  );
 });
