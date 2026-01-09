@@ -1,79 +1,91 @@
-const LOGO_SUS = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...";
-const LOGO_SECRETARIA = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...";
-const LOGO_HEO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...";
+const { jsPDF } = window.jspdf;
+let dados = JSON.parse(localStorage.getItem('rns')) || [];
 
-function cadastrarRN() {
+const lista = document.getElementById('lista');
+const busca = document.getElementById('busca');
+
+document.getElementById('formRN').addEventListener('submit', e => {
+  e.preventDefault();
+
   const rn = {
-    nome: nome.value,
-    cpfRN: cpfRN.value,
-    dataNascimento: dataNascimento.value,
-    sexo: sexo.value,
-    raca: raca.value,
-    peso: peso.value,
-    nomeMae: nomeMae.value,
-    cpfMae: cpfMae.value,
-    telefone: telefone.value,
-    endereco: `${rua.value}, ${numero.value} - ${bairro.value}`,
-    cidadeUF: cidadeUF.value,
-    cep: cep.value,
-    coleta1: primeiraColeta.value,
-    resultado1: resultado1.value,
-    coleta2: segundaColeta.value,
-    resultado2: resultado2.value,
-    situacao: situacao.value,
-    id: Date.now()
+    nome: rnNome.value,
+    cpf: rnCpf.value,
+    nasc: rnNascimento.value,
+    raca: rnRaca.value,
+    c1: resultado1.value || '-',
+    c2: resultado2.value || '-',
+    data: new Date().toLocaleDateString()
   };
 
-  let dados = JSON.parse(localStorage.getItem("rns")) || [];
   dados.push(rn);
-  localStorage.setItem("rns", JSON.stringify(dados));
-
+  localStorage.setItem('rns', JSON.stringify(dados));
   gerarPDF(rn);
-  carregarTabela();
-  cadastroForm.reset();
+  render();
+  e.target.reset();
+});
+
+function render(filtro = '') {
+  lista.innerHTML = '';
+  dados
+    .filter(r => JSON.stringify(r).toLowerCase().includes(filtro.toLowerCase()))
+    .forEach((r, i) => {
+      lista.innerHTML += `
+        <tr>
+          <td>${r.nome}</td>
+          <td>${r.cpf}</td>
+          <td>${r.nasc}</td>
+          <td>${r.raca}</td>
+          <td>${r.c1}</td>
+          <td>${r.c2}</td>
+          <td><button onclick="gerarPDF(dados[${i}])">PDF</button></td>
+        </tr>`;
+    });
 }
 
-function gerarPDF(rn) {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF("p", "mm", "a4");
+busca.addEventListener('input', e => render(e.target.value));
 
-  doc.addImage(LOGO_SUS, "PNG", 10, 10, 30, 30);
-  doc.addImage(LOGO_HEO, "JPEG", 90, 10, 30, 30);
-  doc.addImage(LOGO_SECRETARIA, "JPEG", 170, 10, 30, 30);
+function gerarPDF(r) {
+  const pdf = new jsPDF('p', 'mm', 'a4');
 
-  doc.setFontSize(14);
-  doc.text("TESTE DO PEZINHO", 105, 50, { align: "center" });
+  pdf.setFontSize(12);
+  pdf.text('TESTE DO PEZINHO - SUS', 105, 20, { align: 'center' });
 
-  doc.setFontSize(10);
-  doc.text(`Nome RN: ${rn.nome}`, 20, 70);
-  doc.text(`CPF RN: ${rn.cpfRN}`, 20, 78);
-  doc.text(`Nascimento: ${rn.dataNascimento}`, 20, 86);
-  doc.text(`Resultado 1ª Coleta: ${rn.resultado1}`, 20, 102);
-  doc.text(`Resultado 2ª Coleta: ${rn.resultado2}`, 20, 110);
+  pdf.text(`RN: ${r.nome}`, 20, 40);
+  pdf.text(`CPF: ${r.cpf}`, 20, 50);
+  pdf.text(`Nascimento: ${r.nasc}`, 20, 60);
+  pdf.text(`Raça: ${r.raca}`, 20, 70);
+  pdf.text(`1ª Coleta: ${r.c1}`, 20, 80);
+  pdf.text(`2ª Coleta: ${r.c2}`, 20, 90);
 
-  doc.save(`RN_${rn.nome}_${rn.cpfRN}.pdf`);
+  pdf.save(`RN_${r.nome}.pdf`);
 }
 
-function carregarTabela() {
-  const dados = JSON.parse(localStorage.getItem("rns")) || [];
-  tabela.innerHTML = "";
-
-  dados.forEach(rn => {
-    tabela.innerHTML += `
-      <tr>
-        <td>${rn.nome}</td>
-        <td>${rn.cpfRN}</td>
-        <td>${rn.dataNascimento}</td>
-        <td><button onclick='gerarPDF(${JSON.stringify(rn)})'>🖨 PDF</button></td>
-      </tr>`;
+function exportarExcel() {
+  let csv = 'RN,CPF,Nascimento,Raça,1ª,2ª\n';
+  dados.forEach(r => {
+    csv += `${r.nome},${r.cpf},${r.nasc},${r.raca},${r.c1},${r.c2}\n`;
   });
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'teste-pezinho.csv';
+  link.click();
 }
 
-function filtrarTabela() {
-  const filtro = busca.value.toLowerCase();
-  document.querySelectorAll("#tabela tr").forEach(tr => {
-    tr.style.display = tr.innerText.toLowerCase().includes(filtro) ? "" : "none";
-  });
+function importarArquivo(e) {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = () => {
+    const linhas = reader.result.split('\n').slice(1);
+    linhas.forEach(l => {
+      const [nome, cpf, nasc, raca, c1, c2] = l.split(',');
+      if (nome) dados.push({ nome, cpf, nasc, raca, c1, c2 });
+    });
+    localStorage.setItem('rns', JSON.stringify(dados));
+    render();
+  };
+  reader.readAsText(file);
 }
 
-window.onload = carregarTabela;
+render();
