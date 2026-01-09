@@ -1,60 +1,88 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Inter', sans-serif;
-  background: #f4f8f6;
+  background: #f4f8fb;
+  margin: 0;
   padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 h1 {
-  text-align: center;
-  color: #0b6b3a;
+  color: #0b5ed7;
 }
 
-form {
+main {
   max-width: 1100px;
   margin: auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
 }
 
 fieldset {
-  border: 1px solid #0b6b3a;
+  border: 1px solid #ccc;
+  padding: 15px;
   margin-bottom: 15px;
-  border-radius: 8px;
+  border-radius: 6px;
+  background: #fff;
 }
 
 legend {
-  color: #0b6b3a;
   font-weight: 600;
+  padding: 0 10px;
 }
 
 input, select {
   width: 100%;
-  padding: 8px;
-  margin: 6px 0;
+  padding: 10px;
+  margin-top: 8px;
+}
+
+label {
+  display: block;
+  margin-top: 6px;
 }
 
 .acoes {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
-button {
-  padding: 10px;
-  background: #0b6b3a;
-  color: white;
+.btn {
+  padding: 10px 14px;
   border: none;
   cursor: pointer;
+  border-radius: 4px;
+  color: #fff;
 }
+
+.green { background: #198754; }
+.blue { background: #0d6efd; }
 
 table {
   width: 100%;
-  margin-top: 20px;
-  background: white;
+  margin-top: 15px;
   border-collapse: collapse;
 }
 
 th, td {
-  border-bottom: 1px solid #ddd;
-  padding: 10px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background: #0b5ed7;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  table {
+    font-size: 12px;
+  }
 }
