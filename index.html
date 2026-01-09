@@ -1,114 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>PROJETO TESTE DP PEZINHO</title>
-    <link rel="stylesheet" href="./style.css">
-
-  </head>
-    
-  <body>
-  <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Teste do Pezinho – HEO</title>
+  <meta charset="UTF-8" />
 
-  <!-- Fonte -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>Teste do Pezinho - SUS | HEO</title>
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- RESPONSIVO -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- jsPDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- TEMA PWA -->
+  <meta name="theme-color" content="#0b6b3a" />
 
-  <link rel="stylesheet" href="style.css">
-  
-  <!-- manifestJson -->
-  <link rel="manifest" href="manifest.json">
+  <!-- MANIFESTO PWA -->
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- FONTE -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
+    rel="stylesheet"
+  />
 
 </head>
 
 <body>
 
-<h1>🍼 Cadastro – Teste do Pezinho</h1>
+  <!-- CABEÇALHO -->
+  <header class="app-header">
+    <h1>Cadastro – Teste do Pezinho</h1>
+    <p>Hospital Estadual de Oiapoque – SUS</p>
+  </header>
 
-<form id="cadastroForm">
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main>
+    <!-- 🔽 aqui fica todo o seu formulário atual -->
+  </main>
 
-  <fieldset>
-    <legend>👶 Dados do Recém-Nascido</legend>
-    <input id="nome" placeholder="Nome do RN" required>
-    <input id="cpfRN" placeholder="CPF do RN" required>
-    <input type="date" id="dataNascimento" required>
-    <select id="sexo" required>
-      <option value="">Sexo</option>
-      <option value="M">Masculino</option>
-      <option value="F">Feminino</option>
-    </select>
-    <input id="raca" placeholder="Raça/Cor">
-    <input id="peso" placeholder="Peso (kg)">
-  </fieldset>
+  <!-- RODAPÉ -->
+  <footer class="app-footer">
+    <small>
+      Sistema Local – Teste do Pezinho • SUS • HEO
+    </small>
+  </footer>
 
-  <fieldset>
-    <legend>👩 Responsável</legend>
-    <input id="nomeMae" placeholder="Nome da Mãe">
-    <input id="cpfMae" placeholder="CPF da Mãe">
-    <input id="telefone" placeholder="Telefone">
-  </fieldset>
+  <!-- JS PRINCIPAL -->
+  <script src="script.js"></script>
 
-  <fieldset>
-    <legend>🏠 Endereço</legend>
-    <input id="rua" placeholder="Rua">
-    <input id="numero" placeholder="Número">
-    <input id="bairro" placeholder="Bairro">
-    <input id="cidadeUF" placeholder="Cidade/UF">
-    <input id="cep" placeholder="CEP">
-  </fieldset>
-
-  <fieldset>
-    <legend>🧪 Coleta</legend>
-    <input type="date" id="primeiraColeta">
-    <input id="resultado1" placeholder="Resultado 1ª Coleta">
-    <input type="date" id="segundaColeta">
-    <input id="resultado2" placeholder="Resultado 2ª Coleta">
-    <input id="situacao" placeholder="Situação">
-  </fieldset>
-
-  <div class="acoes">
-    <button type="button" onclick="cadastrarRN()">💾 Cadastrar</button>
-    <button type="button" onclick="importarExcel()">📥 Importar Excel</button>
-    <button type="button" onclick="exportarExcel()">📤 Exportar Excel</button>
-  </div>
-</form>
-
-<input id="busca" placeholder="🔍 Buscar por Nome, CPF ou Data" onkeyup="filtrarTabela()">
-
-<table>
-  <thead>
-    <tr>
-      <th>Nome</th>
-      <th>CPF RN</th>
-      <th>Nascimento</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody id="tabela"></tbody>
-</table>
-
-<script src="script.js"></script>
-  
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
-}
-</script>
+  <!-- REGISTRO DO SERVICE WORKER -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker
+          .register('./service-worker.js')
+          .then(function () {
+            console.log('Service Worker registrado com sucesso');
+          })
+          .catch(function (error) {
+            console.log('Erro ao registrar Service Worker:', error);
+          });
+      });
+    }
+  </script>
 
 </body>
-</html>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'></script><script  src="./script.js"></script>
-
-  </body>
-  
 </html>
