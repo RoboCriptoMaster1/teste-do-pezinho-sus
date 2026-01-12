@@ -1,39 +1,22 @@
-{
-  "name": "Teste do Pezinho – SUS | HEO",
-  "short_name": "Teste do Pezinho",
-  "description": "Sistema Hospitalar Offline para Cadastro e Emissão do Teste do Pezinho – SUS / Hospital Estadual de Oiapoque",
-  "lang": "pt-BR",
-  "start_url": "/teste-do-pezinho-sus/index.html",
-  "scope": "/teste-do-pezinho-sus/",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#ffffff",
-  "theme_color": "#0b5ed7",
-  "categories": ["health", "medical", "government"],
-  "icons": [
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icons/icon-256.png",
-      "sizes": "256x256",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icons/icon-384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
-}
+"icons": [
+  {
+    "src": "icons/icon-192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  },
+  {
+    "src": "icons/icon-256.png",
+    "sizes": "256x256",
+    "type": "image/png"
+  },
+  {
+    "src": "icons/icon-384.png",
+    "sizes": "384x384",
+    "type": "image/png"
+  },
+  {
+    "src": "icons/icon-512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
+]
