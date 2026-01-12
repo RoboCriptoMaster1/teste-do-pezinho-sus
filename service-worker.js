@@ -12,12 +12,11 @@ const FILES_TO_CACHE = [
   "./js/excel.js",
 
   "./icons/icon-192.png",
-  "./icons/icon-256.png",
-  "./icons/icon-384.png",
   "./icons/icon-512.png",
 
   "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
 ];
+
 
 // INSTALL
 self.addEventListener("install", event => {
@@ -55,4 +54,5 @@ self.addEventListener("fetch", event => {
     })
   );
 });
+
 
