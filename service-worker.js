@@ -5,21 +5,18 @@ const FILES_TO_CACHE = [
   "./index.html",
   "./manifest.json",
 
-  // CSS
   "./css/style.css",
 
-  // JS
   "./js/app.js",
   "./js/pdf.js",
+  "./js/excel.js",
 
-  // Fonts
-  "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap",
-
-  // Icons
   "./icons/icon-192.png",
   "./icons/icon-256.png",
   "./icons/icon-384.png",
-  "./icons/icon-512.png"
+  "./icons/icon-512.png",
+
+  "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
 ];
 
 // INSTALL
@@ -58,3 +55,4 @@ self.addEventListener("fetch", event => {
     })
   );
 });
+
