@@ -1,91 +1,107 @@
-const { jsPDF } = window.jspdf;
-let dados = JSON.parse(localStorage.getItem('rns')) || [];
+const form = document.getElementById("formRN");
+const tabela = document.getElementById("tabela");
+const busca = document.getElementById("busca");
+const importFile = document.getElementById("importFile");
 
-const lista = document.getElementById('lista');
-const busca = document.getElementById('busca');
+let dados = JSON.parse(localStorage.getItem("rns")) || [];
 
-document.getElementById('formRN').addEventListener('submit', e => {
+form.addEventListener("submit", e => {
   e.preventDefault();
 
   const rn = {
-    nome: rnNome.value,
-    cpf: rnCpf.value,
-    nasc: rnNascimento.value,
-    raca: rnRaca.value,
-    c1: resultado1.value || '-',
-    c2: resultado2.value || '-',
-    data: new Date().toLocaleDateString()
+    id: Date.now(),
+    nome: nomeRn.value,
+    cpf: cpfRn.value,
+    data: dataNascimento.value,
+    sexo: sexo.value,
+    raca: racaCor.value,
+    peso: peso.value,
+    mae: nomeMae.value,
+    cpfMae: cpfMae.value,
+    contato: contato.value,
+    endereco: endereco.value
   };
 
   dados.push(rn);
-  localStorage.setItem('rns', JSON.stringify(dados));
+  salvar();
   gerarPDF(rn);
-  render();
-  e.target.reset();
+  form.reset();
 });
 
-function render(filtro = '') {
-  lista.innerHTML = '';
-  dados
-    .filter(r => JSON.stringify(r).toLowerCase().includes(filtro.toLowerCase()))
-    .forEach((r, i) => {
-      lista.innerHTML += `
-        <tr>
-          <td>${r.nome}</td>
-          <td>${r.cpf}</td>
-          <td>${r.nasc}</td>
-          <td>${r.raca}</td>
-          <td>${r.c1}</td>
-          <td>${r.c2}</td>
-          <td><button onclick="gerarPDF(dados[${i}])">PDF</button></td>
-        </tr>`;
-    });
+function salvar() {
+  localStorage.setItem("rns", JSON.stringify(dados));
+  render();
 }
 
-busca.addEventListener('input', e => render(e.target.value));
-
-function gerarPDF(r) {
-  const pdf = new jsPDF('p', 'mm', 'a4');
-
-  pdf.setFontSize(12);
-  pdf.text('TESTE DO PEZINHO - SUS', 105, 20, { align: 'center' });
-
-  pdf.text(`RN: ${r.nome}`, 20, 40);
-  pdf.text(`CPF: ${r.cpf}`, 20, 50);
-  pdf.text(`Nascimento: ${r.nasc}`, 20, 60);
-  pdf.text(`Raça: ${r.raca}`, 20, 70);
-  pdf.text(`1ª Coleta: ${r.c1}`, 20, 80);
-  pdf.text(`2ª Coleta: ${r.c2}`, 20, 90);
-
-  pdf.save(`RN_${r.nome}.pdf`);
+function render() {
+  tabela.innerHTML = "";
+  dados.filter(r =>
+    r.nome.toLowerCase().includes(busca.value.toLowerCase()) ||
+    r.cpf.includes(busca.value) ||
+    r.data.includes(busca.value)
+  ).forEach(r => {
+    tabela.innerHTML += `
+      <tr>
+        <td>${r.nome}</td>
+        <td>${r.cpf || "-"}</td>
+        <td>${r.data}</td>
+        <td><button onclick="gerarPDF(${r.id})">PDF</button></td>
+      </tr>`;
+  });
 }
 
-function exportarExcel() {
-  let csv = 'RN,CPF,Nascimento,Raça,1ª,2ª\n';
-  dados.forEach(r => {
-    csv += `${r.nome},${r.cpf},${r.nasc},${r.raca},${r.c1},${r.c2}\n`;
+busca.addEventListener("input", render);
+
+function gerarPDF(ref) {
+  const rn = typeof ref === "object" ? ref : dados.find(d => d.id === ref);
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF("p","mm","a4");
+
+  doc.setFontSize(14);
+  doc.text("TESTE DO PEZINHO – SUS",105,20,{align:"center"});
+  doc.setFontSize(10);
+
+  let y = 40;
+  Object.entries(rn).forEach(([k,v])=>{
+    if(k!=="id"){
+      doc.text(`${k.toUpperCase()}: ${v || "—"}`,20,y);
+      y+=8;
+    }
   });
 
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'teste-pezinho.csv';
-  link.click();
+  doc.save(`RN_${rn.nome}.pdf`);
 }
 
-function importarArquivo(e) {
-  const file = e.target.files[0];
+importFile.addEventListener("change", e => {
   const reader = new FileReader();
-  reader.onload = () => {
-    const linhas = reader.result.split('\n').slice(1);
-    linhas.forEach(l => {
-      const [nome, cpf, nasc, raca, c1, c2] = l.split(',');
-      if (nome) dados.push({ nome, cpf, nasc, raca, c1, c2 });
+  reader.onload = evt => {
+    const wb = XLSX.read(evt.target.result, {type:"binary"});
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    XLSX.utils.sheet_to_json(sheet).forEach(i=>{
+      dados.push({
+        id:Date.now()+Math.random(),
+        nome:i["Nome RN"]||"",
+        cpf:i["CPF RN"]||"",
+        data:i["Data"]||"",
+        sexo:i["Sexo"]||"",
+        raca:i["Raça"]||"",
+        peso:i["Peso"]||"",
+        mae:i["Mãe"]||"",
+        cpfMae:i["CPF Mãe"]||"",
+        contato:i["Contato"]||"",
+        endereco:i["Endereço"]||""
+      });
     });
-    localStorage.setItem('rns', JSON.stringify(dados));
-    render();
+    salvar();
   };
-  reader.readAsText(file);
+  reader.readAsBinaryString(e.target.files[0]);
+});
+
+function exportarExcel(){
+  const ws = XLSX.utils.json_to_sheet(dados);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "RN");
+  XLSX.writeFile(wb, "teste_pezinho.xlsx");
 }
 
 render();
