@@ -2,52 +2,44 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Teste do Pezinho - SUS | HEO</title>
+  <title>Teste do Pezinho – SUS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1b5e20">
 
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color"
-    content="#0b5ed7">
-  
 </head>
 
 <body>
 
 <header>
-  <h1><i class="fa-solid fa-baby"></i> Cadastro – Teste do Pezinho</h1>
+  <h1>Teste do Pezinho</h1>
   <p>Hospital Estadual de Oiapoque – SUS</p>
 </header>
 
 <main>
 
 <form id="formRN">
-
   <fieldset>
-    <legend>🍼 Dados do Recém-Nascido</legend>
+    <legend>🍼 Dados do RN</legend>
 
-    <input required placeholder="Nome do RN" id="rnNome">
-    <input required placeholder="CPF do RN" id="rnCpf">
-    <input type="date" required id="rnNascimento">
+    <input id="nomeRn" placeholder="Nome do RN" required>
+    <input id="cpfRn" placeholder="CPF do RN (opcional)">
+    <input type="date" id="dataNascimento" required>
 
-    <select id="rnSexo" required>
+    <select id="sexo" required>
       <option value="">Sexo</option>
       <option>Masculino</option>
       <option>Feminino</option>
     </select>
 
-    <select id="rnRaca" required>
+    <select id="racaCor" required>
       <option value="">Raça/Cor</option>
       <option>Branca</option>
       <option>Preta</option>
@@ -56,87 +48,50 @@
       <option>Indígena</option>
     </select>
 
-    <input placeholder="Peso (kg)" id="rnPeso">
+    <input id="peso" type="number" step="0.01" placeholder="Peso (kg)" required>
   </fieldset>
 
   <fieldset>
     <legend>👩 Responsável</legend>
-
-    <input placeholder="Nome da Mãe" id="maeNome">
-    <input placeholder="CPF da Mãe" id="maeCpf">
-    <input placeholder="Telefone" id="maeTelefone">
+    <input id="nomeMae" placeholder="Nome da Mãe" required>
+    <input id="cpfMae" placeholder="CPF da Mãe" required>
+    <input id="contato" placeholder="Contato" required>
+    <input id="endereco" placeholder="Endereço" required>
   </fieldset>
 
-  <fieldset>
-    <legend>🏥 Coleta</legend>
-
-    <input placeholder="Responsável pela coleta" id="coletaResp">
-    <input type="date" id="dataColeta">
-
-    <select id="resultado1">
-      <option value="">1ª Coleta</option>
-      <option>Normal</option>
-      <option>Alterado</option>
-    </select>
-
-    <select id="resultado2">
-      <option value="">2ª Coleta</option>
-      <option>Normal</option>
-      <option>Alterado</option>
-    </select>
-  </fieldset>
-
-  <fieldset>
-    <legend>✅ Checklist SUS</legend>
-
-    <label><input type="checkbox"> Coleta entre 3º e 5º dia</label>
-    <label><input type="checkbox"> Amostra adequada</label>
-    <label><input type="checkbox"> Identificação correta</label>
-    <label><input type="checkbox"> Orientação à família</label>
-  </fieldset>
-
-  <div class="acoes">
-    <button type="submit" class="btn green"><i class="fa fa-save"></i> Cadastrar</button>
-    <button type="button" class="btn blue" onclick="exportarExcel()"><i class="fa fa-file-excel"></i> Exportar Excel</button>
-    <input type="file" accept=".csv,.xlsx" onchange="importarArquivo(event)">
-  </div>
-
+  <button type="submit">Salvar e Gerar PDF</button>
 </form>
 
-<section>
-  <h2>📊 Histórico de Cadastros</h2>
-
-  <input id="busca" placeholder="Buscar por nome, CPF ou data">
-
-  <table>
-    <thead>
-      <tr>
-        <th>RN</th>
-        <th>CPF</th>
-        <th>Nasc.</th>
-        <th>Raça</th>
-        <th>1ª</th>
-        <th>2ª</th>
-        <th>PDF</th>
-      </tr>
-    </thead>
-    <tbody id="lista"></tbody>
-  </table>
+<section class="acoes">
+  <input type="file" id="importFile" accept=".csv,.xlsx">
+  <button onclick="exportarExcel()">Exportar Excel</button>
 </section>
+
+<input id="busca" placeholder="Buscar por nome, CPF ou data">
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>CPF RN</th>
+      <th>Data</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody id="tabela"></tbody>
+</table>
 
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="script.js"></script>
 
 <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("service-worker.js")
-      .then(reg => console.log("Service Worker registrado:", reg.scope))
-      .catch(err => console.error("Erro ao registrar SW:", err));
-  });
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
 }
 </script>
- 
+
 </body>
 </html>
